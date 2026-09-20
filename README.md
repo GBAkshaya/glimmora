@@ -5,8 +5,9 @@ Customers browse by collection and occasion, build a cart and wishlist, apply co
 check out; the store owner manages the entire catalog, orders, coupons and homepage content
 from an admin panel — no redeploy needed to change what the site sells or says.
 
-**Live demo:** _add your deployed URL here_
-**Admin demo:** `/admin/login` · _add read-only demo credentials here_
+**Live demo:** <https://glimmora-iqbo9mbnp-gbakshaya.vercel.app>
+**Admin panel:** `/admin/login` — credentials are not published, since an admin has full
+write access to the live store. The dashboard screenshot below shows what it does.
 
 > If the storefront looks empty, the free-tier Supabase project has auto-paused after a
 > period of inactivity. The screenshots below show the app fully populated.
@@ -50,7 +51,7 @@ payment settings sit alongside it.
 - Product CRUD with drag-ordered multi-image upload to Supabase Storage
 - Order management with status transitions (Pending → Confirmed → Shipped → Delivered / Cancelled)
 - Coupon creation with percent or fixed-amount discounts, expiry and per-user usage limits
-- Homepage CMS: offer strip, hero banner, and a "Follow the Glow" Instagram-style gallery
+- Homepage CMS: offer strip, hero banner, and the "Follow the Glow" section copy and link
 - Payment QR upload and VIP WhatsApp subscriber list
 
 ## Engineering notes

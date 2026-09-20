@@ -36,6 +36,14 @@ payment settings sit alongside it.
 
 ![Admin dashboard](docs/screenshot-admin.png)
 
+### Admin product form
+
+Full CRUD over the catalog: pricing and discount, stock, category and Casual/Ethnic
+section, featured and active flags, and multi-image upload straight to Supabase Storage.
+The product code (`GPD005`) is assigned by a database trigger, not entered by hand.
+
+![Admin product form](docs/screenshot-product-form.png)
+
 ## What it does
 
 **Storefront**

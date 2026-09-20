@@ -13,13 +13,23 @@ from an admin panel — no redeploy needed to change what the site sells or says
 
 ## Screenshots
 
-| Storefront | Product detail |
-| --- | --- |
-| _add `docs/screenshot-home.png`_ | _add `docs/screenshot-product.png`_ |
+### Storefront
 
-| Admin dashboard | Admin homepage CMS |
-| --- | --- |
-| _add `docs/screenshot-admin.png`_ | _add `docs/screenshot-cms.png`_ |
+![Glimmora homepage](docs/screenshot-home.png)
+
+### Product detail
+
+Live stock, per-product discounts struck through the original price, wishlist and reviews.
+
+![Product detail page](docs/screenshot-product.png)
+
+### Collections
+
+![Collections page](docs/screenshot-collections.png)
+
+### Admin
+
+_add `docs/screenshot-admin.png` — the dashboard, product form or homepage CMS_
 
 ## What it does
 

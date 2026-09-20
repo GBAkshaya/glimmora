@@ -5,7 +5,7 @@ Customers browse by collection and occasion, build a cart and wishlist, apply co
 check out; the store owner manages the entire catalog, orders, coupons and homepage content
 from an admin panel — no redeploy needed to change what the site sells or says.
 
-**Live demo:** <https://glimmora-iqbo9mbnp-gbakshaya.vercel.app>
+**Live demo:** <https://glimmora-store.vercel.app>
 **Admin panel:** `/admin/login` — credentials are not published, since an admin has full
 write access to the live store. The dashboard screenshot below shows what it does.
 

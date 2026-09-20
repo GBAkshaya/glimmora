@@ -27,9 +27,13 @@ Live stock, per-product discounts struck through the original price, wishlist an
 
 ![Collections page](docs/screenshot-collections.png)
 
-### Admin
+### Admin dashboard
 
-_add `docs/screenshot-admin.png` — the dashboard, product form or homepage CMS_
+Catalog at a glance, with the auto-generated per-category product codes, the
+Casual/Ethnic section split and live stock. Orders, coupons, homepage content and
+payment settings sit alongside it.
+
+![Admin dashboard](docs/screenshot-admin.png)
 
 ## What it does
 

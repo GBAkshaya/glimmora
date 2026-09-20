@@ -1,0 +1,49 @@
+name: Keep Supabase warm
+
+# Free-tier Supabase projects auto-pause after ~7 days of inactivity, which
+# takes the live demo down with them. This pings a cheap read endpoint every
+# 3 days to keep the database counted as active.
+#
+# CAVEAT: GitHub disables scheduled workflows on repos with no activity for 60
+# days, and cron here is best-effort, not guaranteed. If this demo needs to stay
+# up for a long stretch, an external pinger (cron-job.org, UptimeRobot) is more
+# reliable. The README screenshots are the real insurance.
+#
+# SETUP: add two repository secrets under
+# Settings > Secrets and variables > Actions:
+#   SUPABASE_URL       https://<your-ref>.supabase.co
+#   SUPABASE_ANON_KEY  your anon/publishable key
+# The anon key is already public in the client bundle, so this leaks nothing new.
+
+on:
+  schedule:
+    - cron: '0 6 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping Supabase REST endpoint
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::SUPABASE_URL and SUPABASE_ANON_KEY repository secrets are not set."
+            exit 1
+          fi
+
+          code=$(curl -sS -m 30 -o /tmp/body.json -w '%{http_code}' \
+            "$SUPABASE_URL/rest/v1/categories?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+
+          echo "HTTP $code"
+          if [ "$code" != "200" ] && [ "$code" != "206" ]; then
+            echo "::error::Unexpected status $code — the project may be paused or the keys rotated."
+            cat /tmp/body.json
+            exit 1
+          fi
+          echo "Supabase reachable; project kept active."

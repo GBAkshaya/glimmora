@@ -1,12 +1,41 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AtSign } from 'lucide-react'
+import { AtSign, Play } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { fetchProductCards } from '../lib/products'
 import { type ProductCardData } from '../components/ProductCard'
 import { CoverflowCarousel } from '../components/ui/coverflow-carousel'
 import { formatInr, discountedPrice } from '../lib/pricing'
 import logo from '../assets/logo.png.png'
+
+function getInstagramDetails(url?: string | null) {
+  if (!url) return { isInsta: false, code: null, thumbUrl: null, type: 'other' }
+  const match = url.match(/instagram\.com\/(p|reel|tv)\/([^/?#&]+)/i)
+  if (match) {
+    const type = match[1].toLowerCase()
+    const code = match[2]
+    return {
+      isInsta: true,
+      code,
+      type,
+      thumbUrl: `https://www.instagram.com/${type}/${code}/media/?size=l`,
+    }
+  }
+  return { isInsta: false, code: null, thumbUrl: null, type: 'other' }
+}
+
+function isGlowVideo(url?: string | null) {
+  if (!url) return false
+  const lower = url.toLowerCase()
+  return (
+    lower.endsWith('.mp4') ||
+    lower.endsWith('.webm') ||
+    lower.endsWith('.mov') ||
+    lower.includes('/video/') ||
+    lower.includes('video=true') ||
+    lower.includes('format=mp4')
+  )
+}
 
 type HomeContent = {
   section: string
@@ -18,10 +47,17 @@ type HomeContent = {
   ends_at: string | null
 }
 
+type GlowImage = {
+  id: string
+  image_url: string
+  link_url: string | null
+}
+
 export default function Home() {
   const navigate = useNavigate()
   const [content, setContent] = useState<Record<string, HomeContent>>({})
   const [featured, setFeatured] = useState<ProductCardData[]>([])
+  const [glowImages, setGlowImages] = useState<GlowImage[]>([])
 
   const carouselCards = useMemo(() => {
     return featured.map((product) => ({
@@ -42,6 +78,19 @@ export default function Home() {
         for (const row of data ?? []) map[row.section] = row
         setContent(map)
       })
+
+    supabase
+      .from('follow_glow_images')
+      .select('id, image_url, link_url, is_active')
+      .order('sort_order', { ascending: true })
+      .then(
+        ({ data, error }) => {
+          if (!error && data) {
+            setGlowImages(data.filter((item) => item.is_active !== false))
+          }
+        },
+        () => {}
+      )
 
     fetchProductCards({ featuredOnly: true, limit: 8 })
       .then(setFeatured)
@@ -144,7 +193,7 @@ export default function Home() {
       {/* Follow the Glow */}
       <section className="py-16 md:py-24 bg-ivory/60 border-t border-gold/15">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-8">
+          <div className="text-center mb-12">
             <p className="eyebrow text-gold-dark mb-3 uppercase tracking-[0.25em] font-medium">Join the Community</p>
             <h2 className="font-logo text-3xl md:text-5xl mb-4">
               Follow the <span className="italic text-gold-dark">Glow</span>
@@ -152,6 +201,85 @@ export default function Home() {
             <p className="text-sm text-charcoal/70 max-w-md mx-auto">
               Real moments in Glimmora, styled by you — tag us <span className="text-gold-dark font-medium">@glimmora.in</span> to be featured.
             </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
+            {(glowImages.length > 0
+              ? glowImages
+              : [
+                { id: '1', image_url: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800&auto=format&fit=crop', link_url: 'https://instagram.com/glimmora.in' },
+                { id: '2', image_url: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop', link_url: 'https://instagram.com/glimmora.in' },
+                { id: '3', image_url: 'https://images.unsplash.com/photo-1611591475140-4988844870f7?q=80&w=800&auto=format&fit=crop', link_url: 'https://instagram.com/glimmora.in' },
+                { id: '4', image_url: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800&auto=format&fit=crop', link_url: 'https://instagram.com/glimmora.in' },
+              ]
+            ).map((item, i) => {
+              const instaMedia = getInstagramDetails(item.image_url)
+              const instaLink = getInstagramDetails(item.link_url)
+              const insta = instaMedia.isInsta ? instaMedia : instaLink
+
+              const isDirectVid = isGlowVideo(item.image_url)
+              const isInstaReel = insta.isInsta && (insta.type === 'reel' || insta.type === 'tv')
+              const isVid = isDirectVid || isInstaReel
+
+              const displayImg = isDirectVid
+                ? item.image_url
+                : insta.isInsta
+                  ? insta.thumbUrl
+                  : item.image_url
+
+              const redirectUrl =
+                item.link_url ||
+                (insta.isInsta ? `https://www.instagram.com/${insta.type}/${insta.code}/` : followTheGlow?.link_url ?? 'https://instagram.com/glimmora.in')
+
+              return (
+                <a
+                  key={item.id || i}
+                  href={redirectUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group relative block aspect-[4/5] overflow-hidden rounded-2xl border border-gold/15 bg-ivory shadow-sm transition-all duration-300 hover:shadow-md hover:border-gold/30"
+                >
+                  {insta.isInsta ? (
+                    <iframe
+                      src={`https://www.instagram.com/${insta.type}/${insta.code}/embed/`}
+                      className="w-full h-full border-0 pointer-events-none object-cover scale-[1.25]"
+                      scrolling="no"
+                      title="Instagram Post"
+                    />
+                  ) : isDirectVid ? (
+                    <video
+                      src={item.image_url}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <img
+                      src={displayImg || 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800&auto=format&fit=crop'}
+                      alt="Glimmora Community"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800&auto=format&fit=crop'
+                      }}
+                    />
+                  )}
+
+                  {isVid && (
+                    <div className="absolute top-3 left-3 bg-black/50 backdrop-blur-md text-ivory text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-full flex items-center gap-1 font-medium z-10 border border-white/10">
+                      <Play size={10} fill="currentColor" /> Reel
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-ivory/90 text-gold-dark flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
+                      <AtSign size={18} strokeWidth={2} />
+                    </div>
+                  </div>
+                </a>
+              )
+            })}
           </div>
 
           <div className="text-center">

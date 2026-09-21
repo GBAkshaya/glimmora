@@ -59,7 +59,7 @@ The product code (`GPD005`) is assigned by a database trigger, not entered by ha
 - Product CRUD with drag-ordered multi-image upload to Supabase Storage
 - Order management with status transitions (Pending → Confirmed → Shipped → Delivered / Cancelled)
 - Coupon creation with percent or fixed-amount discounts, expiry and per-user usage limits
-- Homepage CMS: offer strip, hero banner, and the "Follow the Glow" section copy and link
+- Homepage CMS: offer strip, hero banner, and a "Follow the Glow" gallery of photos, videos and Instagram posts that link out to Instagram
 - Payment QR upload and VIP WhatsApp subscriber list
 
 ## Engineering notes

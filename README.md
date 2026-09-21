@@ -52,7 +52,10 @@ The product code (`GPD005`) is assigned by a database trigger, not entered by ha
 
 **Storefront**
 - Scroll-scrubbed cinematic hero (GSAP ScrollTrigger) with a still fallback for reduced-motion users
-- Sections that tilt in with 3D perspective, and category cards that tilt toward the cursor
+- The homepage stays dark from hero to footer; every section below the story is a 3D plane whose
+  tilt is tied to scroll position, rising in, lying flat, then tipping away (and reversing on the way up)
+- Oversized type bands that slide against the scroll, and category cards that tilt toward the cursor
+- Inertial wheel scrolling across the storefront (Lenis), with native touch scrolling kept on phones
 - Browse by category (`/collections/:slug`) and by occasion, plus a Casual/Ethnic section split
 - Full-text product search across names and descriptions
 - Cart and wishlist that survive a refresh, with wishlist synced to the signed-in account
@@ -91,6 +94,14 @@ The parts that were more interesting than the CRUD:
   URLs rather than permanent public links.
 - **Human-readable identifiers.** Database triggers assign order numbers (`070826-A1B2`) and
   per-category product codes (`GER001`) on insert, with collision retry.
+- **One homepage theme switch, no dark-mode forks.** Tailwind v4 reads theme colours from CSS
+  variables, so the dark homepage is a single `.theme-noir` class that re-maps `cream`, `ivory`,
+  `charcoal` and `gold-dark`. Every themed component flips with it; the few colours that must
+  never flip (text over photos, always-dark panels) use fixed `pearl`/`onyx`/`ink` tokens instead.
+- **Smooth scrolling that never traps the page.** Lenis runs in fixed-duration mode rather than
+  lerp: lerp chases its target until rounded values match, which on a page with a fractional
+  maximum scroll never happens, leaving Lenis "scrolling" forever and overriding the scrollbar and
+  keyboard. A duration always completes.
 - **WhatsApp notification degrades gracefully.** Checkout races the notification Edge Function
   against a 6-second timeout and falls back to a click-to-send link, so an undeployed or slow
   function can never stall or fail an order.

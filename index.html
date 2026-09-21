@@ -5,6 +5,10 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Glimmora — The Aura of Elegance</title>
+    <!-- The homepage is dark; apply its theme before first paint so it never flashes light. -->
+    <script>
+      if (location.pathname === '/') document.documentElement.classList.add('theme-noir')
+    </script>
     <meta
       name="description"
       content="Glimmora — handpicked rings, earrings, pendants and necklaces. Everyday elegance and occasion pieces, delivered across India."

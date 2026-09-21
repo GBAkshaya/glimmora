@@ -103,7 +103,7 @@ export default function Navbar() {
           <div className="px-3 sm:px-6 pb-3">
             <form
               onSubmit={submitSearch}
-              className="flex items-center gap-2 bg-white rounded-full border border-gold/30 px-4 py-2 shadow-sm"
+              className="flex items-center gap-2 bg-ivory rounded-full border border-gold/30 px-4 py-2 shadow-sm"
             >
               <Search size={16} className="text-charcoal/40 shrink-0" />
               <input

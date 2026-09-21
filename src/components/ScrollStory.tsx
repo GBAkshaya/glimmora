@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import logo from '../assets/logo.png.png'
+import { scrollToY } from '../lib/smoothScroll'
 
 gsap.registerPlugin(ScrollTrigger)
 // Mobile address bars resize the viewport while scrolling; refreshing on every
@@ -152,10 +153,10 @@ function ChapterText({ chapter, headingLevel = 'h2' }: { chapter: Chapter; headi
       <p className="mb-5 text-[11px] uppercase tracking-[0.4em] text-gold [text-shadow:0_1px_12px_rgba(0,0,0,0.9)]">
         {chapter.eyebrow}
       </p>
-      <Heading className="font-logo text-5xl leading-[1.05] text-ivory [text-shadow:0_4px_40px_rgba(0,0,0,0.85),0_1px_3px_rgba(0,0,0,0.6)] sm:text-6xl md:text-7xl lg:text-8xl">
+      <Heading className="font-logo text-5xl leading-[1.05] text-pearl [text-shadow:0_4px_40px_rgba(0,0,0,0.85),0_1px_3px_rgba(0,0,0,0.6)] sm:text-6xl md:text-7xl lg:text-8xl">
         {chapter.title[0]} <span className="italic text-[#e3c587]">{chapter.title[1]}</span>
       </Heading>
-      <p className="mx-auto mt-6 max-w-md text-sm text-ivory/85 [text-shadow:0_1px_14px_rgba(0,0,0,0.95)] md:text-base">
+      <p className="mx-auto mt-6 max-w-md text-sm text-pearl/85 [text-shadow:0_1px_14px_rgba(0,0,0,0.95)] md:text-base">
         {chapter.body}
       </p>
     </>
@@ -167,23 +168,23 @@ function Finale() {
     <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-6 md:grid-cols-2 md:gap-16">
       <div className="text-center md:text-left">
         <p className="mb-5 text-[11px] uppercase tracking-[0.4em] text-gold/90">The Aura of Elegance</p>
-        <h1 className="font-logo text-5xl leading-[1.08] text-ivory md:text-6xl lg:text-7xl">
+        <h1 className="font-logo text-5xl leading-[1.08] text-pearl md:text-6xl lg:text-7xl">
           Jewellery that <span className="italic text-gold">tells your story.</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-md text-ivory/70 md:mx-0">
+        <p className="mx-auto mt-6 max-w-md text-pearl/70 md:mx-0">
           Fine craftsmanship, ethically sourced materials, and timeless design for every moment — welcome to
           Glimmora.
         </p>
         <div className="mt-9 flex items-center justify-center gap-6 md:justify-start">
           <Link
             to="/collections"
-            className="rounded-lg bg-gold px-6 py-3 text-sm tracking-wide text-charcoal shadow-[0_0_40px_rgba(198,161,91,0.35)] transition-all hover:bg-ivory hover:shadow-[0_0_50px_rgba(198,161,91,0.5)]"
+            className="rounded-lg bg-gold px-6 py-3 text-sm tracking-wide text-ink shadow-[0_0_40px_rgba(198,161,91,0.35)] transition-all hover:bg-pearl hover:shadow-[0_0_50px_rgba(198,161,91,0.5)]"
           >
             Explore Collections
           </Link>
           <Link
             to="/best-sellers"
-            className="border-b border-ivory/30 pb-0.5 text-sm tracking-wide text-ivory transition-colors hover:border-gold hover:text-gold"
+            className="border-b border-pearl/30 pb-0.5 text-sm tracking-wide text-pearl transition-colors hover:border-gold hover:text-gold"
           >
             Best Sellers
           </Link>
@@ -291,13 +292,13 @@ export default function ScrollStory() {
     if (!st) return
     const time = i === 0 ? 0 : i + 0.35
     const progress = Math.min(1, time / durationRef.current)
-    window.scrollTo({ top: st.start + (st.end - st.start) * progress, behavior: 'smooth' })
+    scrollToY(st.start + (st.end - st.start) * progress)
   }
 
   // Reduced motion: no pinning or scrubbing, just the chapters as still panels.
   if (reduced) {
     return (
-      <section aria-label="The Glimmora story" className="bg-[#0b0908] text-ivory">
+      <section aria-label="The Glimmora story" className="bg-[#0b0908] text-pearl">
         {CHAPTERS.map((c) => (
           <div key={c.key} className="relative flex min-h-[70svh] items-center justify-center overflow-hidden">
             <img srcSet={srcSet(c.key)} sizes="100vw" src={`/story/${c.key}-1920.webp`} alt={c.alt} className="absolute inset-0 h-full w-full object-cover" />
@@ -315,7 +316,7 @@ export default function ScrollStory() {
   }
 
   return (
-    <section ref={rootRef} aria-label="The Glimmora story" className="relative bg-[#0b0908] text-ivory">
+    <section ref={rootRef} aria-label="The Glimmora story" className="relative bg-[#0b0908] text-pearl">
       <div ref={stageRef} className="relative h-[100svh] overflow-hidden">
         {/* Image layers, stacked so each later chapter sits above the last */}
         {CHAPTERS.map((c, i) => (
@@ -378,12 +379,12 @@ export default function ScrollStory() {
             >
               <span
                 className={`block h-px transition-all duration-500 ${
-                  active === i ? 'w-10 bg-gold' : 'w-4 bg-ivory/30 group-hover:w-6 group-hover:bg-ivory/60'
+                  active === i ? 'w-10 bg-gold' : 'w-4 bg-pearl/30 group-hover:w-6 group-hover:bg-pearl/60'
                 }`}
               />
               <span
                 className={`text-[10px] tracking-[0.3em] transition-opacity duration-500 ${
-                  active === i ? 'text-gold opacity-100' : 'text-ivory opacity-0 group-hover:opacity-60'
+                  active === i ? 'text-gold opacity-100' : 'text-pearl opacity-0 group-hover:opacity-60'
                 }`}
               >
                 {String(i + 1).padStart(2, '0')}
@@ -393,14 +394,14 @@ export default function ScrollStory() {
         </nav>
 
         {/* Counter */}
-        <div className="absolute bottom-7 left-6 z-10 font-logo text-sm tracking-[0.2em] text-ivory/60 lg:left-10">
+        <div className="absolute bottom-7 left-6 z-10 font-logo text-sm tracking-[0.2em] text-pearl/60 lg:left-10">
           <span className="text-gold">{String(active + 1).padStart(2, '0')}</span> / {String(TOTAL).padStart(2, '0')}
         </div>
 
         {/* Scroll hint */}
         <div data-hint className="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-3">
-          <span className="text-[10px] uppercase tracking-[0.4em] text-ivory/60">Scroll the journey</span>
-          <span className="relative block h-10 w-px overflow-hidden bg-ivory/15">
+          <span className="text-[10px] uppercase tracking-[0.4em] text-pearl/60">Scroll the journey</span>
+          <span className="relative block h-10 w-px overflow-hidden bg-pearl/15">
             <span className="absolute inset-x-0 top-0 h-1/2 animate-scroll-cue bg-gold" />
           </span>
         </div>

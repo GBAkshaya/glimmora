@@ -36,7 +36,7 @@ export default function CategoryTile({ category }: { category: CategoryTileData 
       to={`/collections/${category.slug}`}
       onPointerMove={handleMove}
       onPointerLeave={reset}
-      className="group relative block aspect-[3/4] overflow-hidden rounded-2xl bg-charcoal shadow-[0_18px_40px_-18px_rgba(35,31,28,0.45)] transition-transform duration-300 ease-out will-change-transform"
+      className="group relative block aspect-[3/4] overflow-hidden rounded-2xl bg-onyx shadow-[0_18px_40px_-18px_rgba(35,31,28,0.45)] transition-transform duration-300 ease-out will-change-transform"
     >
       {category.image ? (
         <img
@@ -58,8 +58,8 @@ export default function CategoryTile({ category }: { category: CategoryTileData 
         <p className="text-[10px] uppercase tracking-[0.3em] text-gold">
           {category.count} {category.count === 1 ? 'piece' : 'pieces'}
         </p>
-        <h3 className="mt-1 font-logo text-2xl text-ivory md:text-3xl">{category.name}</h3>
-        <span className="mt-3 inline-flex items-center gap-2 text-xs tracking-wide text-ivory/70 transition-colors group-hover:text-gold">
+        <h3 className="mt-1 font-logo text-2xl text-pearl md:text-3xl">{category.name}</h3>
+        <span className="mt-3 inline-flex items-center gap-2 text-xs tracking-wide text-pearl/70 transition-colors group-hover:text-gold">
           Shop now
           <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
         </span>

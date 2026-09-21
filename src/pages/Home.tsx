@@ -7,7 +7,8 @@ import { fetchProductCards } from '../lib/products'
 import { type ProductCardData } from '../components/ProductCard'
 import { CoverflowCarousel } from '../components/ui/coverflow-carousel'
 import ScrollStory from '../components/ScrollStory'
-import Reveal from '../components/Reveal'
+import Depth from '../components/Depth'
+import MarqueeBand from '../components/MarqueeBand'
 import CategoryTile, { type CategoryTileData } from '../components/CategoryTile'
 import { formatInr, discountedPrice } from '../lib/pricing'
 
@@ -148,29 +149,23 @@ export default function Home() {
       {/* Pinned, scroll-driven hero: the life of a piece, ending on the shop CTAs */}
       <ScrollStory />
 
-      {/* Soft hand-off from the dark story into the light page */}
-      <div aria-hidden className="h-24 bg-gradient-to-b from-[#0b0908] to-cream md:h-32" />
-
-      {/* Brand Tagline Banner */}
-      <section className="mb-10 py-12 bg-ivory/80 border-y border-gold/15 text-center relative overflow-hidden">
-        <Reveal className="max-w-4xl mx-auto px-6 relative z-10">
-          <p className="text-[11px] uppercase tracking-[0.35em] text-gold-dark mb-2 font-medium">Glimmora Signature</p>
-          <h2 className="font-logo text-3xl md:text-4xl text-charcoal italic tracking-wide">
-            "The Aura of Elegance"
-          </h2>
-          <div className="w-16 h-[1px] bg-gold-dark/40 mx-auto mt-4" />
-        </Reveal>
-      </section>
+      {/* Brand band: oversized type sliding with the scroll */}
+      <MarqueeBand
+        lines={[
+          ['Glimmora', 'The Aura of Elegance'],
+          ['Rings', 'Earrings', 'Pendants', 'Necklaces', 'Bracelets'],
+        ]}
+      />
 
       {/* Featured products */}
-      <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-        <Reveal className="text-center mb-10">
-          <p className="eyebrow mb-3">Curated Collection</p>
-          <h2 className="font-logo text-3xl md:text-5xl">
-            Designed to be <span className="italic text-gold-dark">cherished.</span>
-          </h2>
-        </Reveal>
-        <Reveal watch={featured.length}>
+      <section className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+        <Depth watch={featured.length}>
+          <div className="text-center mb-10">
+            <p className="eyebrow mb-3">Curated Collection</p>
+            <h2 className="font-logo text-4xl md:text-6xl">
+              Designed to be <span className="italic text-gold-dark">cherished.</span>
+            </h2>
+          </div>
           {featured.length === 0 ? (
             <p className="text-center text-charcoal/60">Nothing featured yet.</p>
           ) : (
@@ -184,52 +179,50 @@ export default function Home() {
               }}
             />
           )}
-        </Reveal>
+        </Depth>
       </section>
 
       {/* Shop by category */}
       {categories.length > 0 && (
-        <section className="max-w-6xl mx-auto px-6 pb-16 md:pb-24">
-          <Reveal className="mb-10 flex flex-col items-center justify-between gap-4 text-center md:flex-row md:items-end md:text-left">
-            <div>
-              <p className="eyebrow mb-3">Explore</p>
-              <h2 className="font-logo text-3xl md:text-5xl">
-                Shop by <span className="italic text-gold-dark">category.</span>
-              </h2>
-            </div>
-            <Link
-              to="/collections"
-              className="text-sm tracking-wide text-charcoal border-b border-charcoal/30 hover:border-gold-dark hover:text-gold-dark pb-0.5 transition-colors"
-            >
-              View all collections
-            </Link>
-          </Reveal>
-          <Reveal stagger watch={categories.length} className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-5 lg:grid-cols-5">
-            {categories.map((c) => (
-              <div key={c.id} data-reveal-item>
-                <CategoryTile category={c} />
+        <section className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+          <Depth watch={categories.length}>
+            <div className="mb-10 flex flex-col items-center justify-between gap-4 text-center md:flex-row md:items-end md:text-left">
+              <div>
+                <p className="eyebrow mb-3">Explore</p>
+                <h2 className="font-logo text-4xl md:text-6xl">
+                  Shop by <span className="italic text-gold-dark">category.</span>
+                </h2>
               </div>
-            ))}
-          </Reveal>
+              <Link
+                to="/collections"
+                className="text-sm tracking-wide text-charcoal border-b border-charcoal/30 hover:border-gold-dark hover:text-gold-dark pb-0.5 transition-colors"
+              >
+                View all collections
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-5 lg:grid-cols-5">
+              {categories.map((c) => (
+                <CategoryTile key={c.id} category={c} />
+              ))}
+            </div>
+          </Depth>
         </section>
       )}
 
-
-
       {/* Follow the Glow */}
-      <section className="py-16 md:py-24 bg-ivory/60 border-t border-gold/15">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal className="text-center mb-12">
+      <section className="py-16 md:py-24">
+        <Depth watch={glowImages.length} exit={false} className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
             <p className="eyebrow text-gold-dark mb-3 uppercase tracking-[0.25em] font-medium">Join the Community</p>
-            <h2 className="font-logo text-3xl md:text-5xl mb-4">
+            <h2 className="font-logo text-4xl md:text-6xl mb-4">
               Follow the <span className="italic text-gold-dark">Glow</span>
             </h2>
             <p className="text-sm text-charcoal/70 max-w-md mx-auto">
               Real moments in Glimmora, styled by you — tag us <span className="text-gold-dark font-medium">@glimmora.in</span> to be featured.
             </p>
-          </Reveal>
+          </div>
 
-          <Reveal stagger watch={glowImages.length} className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
             {(glowImages.length > 0
               ? glowImages
               : [
@@ -260,7 +253,6 @@ export default function Home() {
               return (
                 <a
                   key={item.id || i}
-                  data-reveal-item
                   href={redirectUrl}
                   target="_blank"
                   rel="noreferrer"
@@ -294,12 +286,12 @@ export default function Home() {
                   )}
 
                   {isVid && (
-                    <div className="absolute top-3 left-3 bg-black/50 backdrop-blur-md text-ivory text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-full flex items-center gap-1 font-medium z-10 border border-white/10">
+                    <div className="absolute top-3 left-3 bg-black/50 backdrop-blur-md text-pearl text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-full flex items-center gap-1 font-medium z-10 border border-white/10">
                       <Play size={10} fill="currentColor" /> Reel
                     </div>
                   )}
 
-                  <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors flex items-center justify-center">
                     <div className="w-10 h-10 rounded-full bg-ivory/90 text-gold-dark flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
                       <AtSign size={18} strokeWidth={2} />
                     </div>
@@ -307,7 +299,7 @@ export default function Home() {
                 </a>
               )
             })}
-          </Reveal>
+          </div>
 
           <div className="text-center">
             <a
@@ -320,7 +312,7 @@ export default function Home() {
               Follow @glimmora.in
             </a>
           </div>
-        </div>
+        </Depth>
       </section>
     </div>
   )

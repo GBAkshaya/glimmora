@@ -18,6 +18,7 @@ import { ADMIN_WHATSAPP_NUMBER, buildWhatsAppLink } from '../lib/whatsapp'
 import writeLogo from '../assets/write.png.png'
 import logo from '../assets/logo.png.png'
 import textLogo from '../assets/text.png.png'
+import { scrollToY } from '../lib/smoothScroll'
 
 const GLIMMORA_EMAIL = 'glimmora.jewels@gmail.com'
 const DEFAULT_INSTAGRAM_LINK = 'https://instagram.com/glimmora.in'
@@ -77,7 +78,7 @@ export default function Footer() {
   }
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    scrollToY(0)
   }
 
   const year = new Date().getFullYear()
@@ -88,7 +89,7 @@ export default function Footer() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-gold/5 blur-3xl pointer-events-none rounded-full" />
 
       {/* 1. "Why Glimmora" Promise Section */}
-      <div className="border-b border-gold/15 bg-white/50 backdrop-blur-md py-10">
+      <div className="border-b border-gold/15 bg-ivory/50 backdrop-blur-md py-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-8">
             <span className="eyebrow text-gold-dark font-medium tracking-[0.25em] uppercase">
@@ -166,7 +167,7 @@ export default function Footer() {
 
       {/* 2. VIP WhatsApp Banner ("The Glimmora Circle") */}
       <div className="max-w-7xl mx-auto px-6 pt-12 pb-6">
-        <div className="relative rounded-2xl bg-gradient-to-r from-charcoal via-charcoal/95 to-charcoal text-ivory p-8 md:p-10 shadow-xl overflow-hidden border border-gold/30">
+        <div className="relative rounded-2xl bg-gradient-to-r from-onyx via-onyx/95 to-onyx text-pearl p-8 md:p-10 shadow-xl overflow-hidden border border-gold/30">
           <div className="absolute -right-12 -top-12 w-64 h-64 bg-gold/10 rounded-full blur-2xl pointer-events-none" />
           
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
@@ -178,7 +179,7 @@ export default function Footer() {
               <h3 className="text-2xl md:text-3xl font-serif tracking-wide text-white font-normal">
                 Elevate Your Jewelry Collection
               </h3>
-              <p className="text-sm text-ivory/70 mt-2 font-light leading-relaxed">
+              <p className="text-sm text-pearl/70 mt-2 font-light leading-relaxed">
                 Join our VIP inner circle on WhatsApp to receive private previews of new launches, exclusive secret offers &amp; bespoke jewelry care guides.
               </p>
             </div>
@@ -223,7 +224,7 @@ export default function Footer() {
                   )}
                 </form>
               )}
-              <p className="text-[11px] text-ivory/40 text-center lg:text-left mt-2 font-light">
+              <p className="text-[11px] text-pearl/40 text-center lg:text-left mt-2 font-light">
                 We respect your privacy. No spam. Only official VIP offers.
               </p>
             </div>
@@ -245,7 +246,7 @@ export default function Footer() {
               <img
                 src={writeLogo}
                 alt="Glimmora"
-                className="h-10 md:h-12 w-auto object-contain mix-blend-multiply transition-all duration-300 group-hover:brightness-110"
+                className="h-10 md:h-12 w-auto object-contain mix-blend-multiply noir:mix-blend-normal transition-all duration-300 group-hover:brightness-110"
               />
             </Link>
             
@@ -264,7 +265,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Instagram"
-                  className="w-10 h-10 rounded-xl bg-white border border-gold/20 flex items-center justify-center text-charcoal/70 hover:text-gold-dark hover:border-gold hover:bg-gold/10 hover:shadow-md transition-all duration-300 group"
+                  className="w-10 h-10 rounded-xl bg-ivory border border-gold/20 flex items-center justify-center text-charcoal/70 hover:text-gold-dark hover:border-gold hover:bg-gold/10 hover:shadow-md transition-all duration-300 group"
                 >
                   <AtSign size={18} className="group-hover:scale-110 transition-transform" />
                 </a>
@@ -275,7 +276,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label="WhatsApp Concierge"
-                    className="w-10 h-10 rounded-xl bg-white border border-gold/20 flex items-center justify-center text-charcoal/70 hover:text-emerald-600 hover:border-emerald-400 hover:bg-emerald-50 hover:shadow-md transition-all duration-300 group"
+                    className="w-10 h-10 rounded-xl bg-ivory border border-gold/20 flex items-center justify-center text-charcoal/70 hover:text-emerald-600 hover:border-emerald-400 hover:bg-emerald-50 noir:hover:bg-emerald-500/15 noir:hover:text-emerald-300 hover:shadow-md transition-all duration-300 group"
                   >
                     <MessageCircle size={18} className="group-hover:scale-110 transition-transform" />
                   </a>
@@ -284,12 +285,12 @@ export default function Footer() {
                 <a
                   href={`mailto:${GLIMMORA_EMAIL}`}
                   aria-label="Email Us"
-                  className="w-10 h-10 rounded-xl bg-white border border-gold/20 flex items-center justify-center text-charcoal/70 hover:text-gold-dark hover:border-gold hover:bg-gold/10 hover:shadow-md transition-all duration-300 group"
+                  className="w-10 h-10 rounded-xl bg-ivory border border-gold/20 flex items-center justify-center text-charcoal/70 hover:text-gold-dark hover:border-gold hover:bg-gold/10 hover:shadow-md transition-all duration-300 group"
                 >
                   <Mail size={18} className="group-hover:scale-110 transition-transform" />
                 </a>
 
-                <div className="w-10 h-10 rounded-xl bg-white border border-gold/20 flex items-center justify-center text-charcoal/40 hover:text-gold-dark hover:border-gold hover:bg-gold/10 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-ivory border border-gold/20 flex items-center justify-center text-charcoal/40 hover:text-gold-dark hover:border-gold hover:bg-gold/10 transition-all duration-300">
                   <Sparkles size={18} />
                 </div>
               </div>
@@ -319,7 +320,7 @@ export default function Footer() {
               <Link to="/best-sellers" className="hover:text-gold-dark transition-colors inline-flex items-center gap-2 group">
                 <span className="w-1.5 h-1.5 rounded-full bg-gold/40 group-hover:bg-gold transition-colors" />
                 <span>Best Sellers</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-medium border border-amber-300">HOT</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-medium border border-amber-300 noir:bg-amber-400/15 noir:text-amber-200 noir:border-amber-400/40">HOT</span>
               </Link>
             </li>
             <li>
@@ -400,12 +401,12 @@ export default function Footer() {
                   href={buildWhatsAppLink(ADMIN_WHATSAPP_NUMBER, "Hi Glimmora! I have a question about your products.")}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 hover:text-emerald-700 transition-colors p-2 rounded-lg bg-emerald-50/60 border border-emerald-200/60 text-emerald-900 group"
+                  className="flex items-center gap-2 hover:text-emerald-700 transition-colors p-2 rounded-lg bg-emerald-50/60 border border-emerald-200/60 text-emerald-900 group noir:bg-emerald-500/10 noir:border-emerald-400/30 noir:text-emerald-100 noir:hover:text-emerald-300"
                 >
-                  <MessageCircle size={16} className="text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
+                  <MessageCircle size={16} className="text-emerald-600 noir:text-emerald-400 shrink-0 group-hover:scale-110 transition-transform" />
                   <div className="flex flex-col text-xs">
                     <span className="font-medium">WhatsApp Concierge</span>
-                    <span className="text-[10px] text-emerald-700/80 flex items-center gap-1">
+                    <span className="text-[10px] text-emerald-700/80 noir:text-emerald-300/80 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                       Live Chat Available
                     </span>
@@ -417,7 +418,7 @@ export default function Footer() {
             <li>
               <a
                 href={`mailto:${GLIMMORA_EMAIL}`}
-                className="flex items-center gap-2 hover:text-gold-dark transition-colors p-2 rounded-lg bg-white border border-gold/20 break-all text-xs"
+                className="flex items-center gap-2 hover:text-gold-dark transition-colors p-2 rounded-lg bg-ivory border border-gold/20 break-all text-xs"
               >
                 <Mail size={15} className="text-gold-dark shrink-0" />
                 <span>{GLIMMORA_EMAIL}</span>
@@ -436,12 +437,12 @@ export default function Footer() {
 
 
       {/* 5. Luxury Watermark Signature & Copyright */}
-      <div className="py-12 border-t border-gold/15 flex flex-col items-center justify-center bg-gradient-to-b from-white/40 to-ivory relative overflow-hidden">
+      <div className="py-12 border-t border-gold/15 flex flex-col items-center justify-center bg-gradient-to-b from-ivory/40 to-ivory relative overflow-hidden">
         <Link to="/" className="group transition-transform duration-300 hover:scale-105 relative z-10">
           <img
             src={textLogo}
             alt="Glimmora Luxury Signature"
-            className="h-16 md:h-24 w-auto object-contain mix-blend-multiply opacity-85 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-sm"
+            className="h-16 md:h-24 w-auto object-contain mix-blend-multiply noir:mix-blend-normal opacity-85 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-sm"
           />
         </Link>
         <p className="text-[11px] uppercase tracking-[0.4em] text-gold-dark mt-3 font-medium relative z-10">
@@ -453,7 +454,7 @@ export default function Footer() {
           <button
             onClick={scrollToTop}
             aria-label="Back to top"
-            className="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full bg-charcoal text-gold border border-gold/40 shadow-2xl flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all duration-300 hover:scale-110 active:scale-95 group"
+            className="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full bg-onyx text-gold border border-gold/40 shadow-2xl flex items-center justify-center hover:bg-gold hover:text-onyx transition-all duration-300 hover:scale-110 active:scale-95 group"
           >
             <ArrowUp size={18} className="group-hover:-translate-y-0.5 transition-transform" />
           </button>
@@ -461,10 +462,10 @@ export default function Footer() {
       </div>
 
       {/* Copyright Bar */}
-      <div className="border-t border-gold/15 bg-charcoal text-ivory/60">
+      <div className="border-t border-gold/15 bg-onyx text-pearl/60">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-xs gap-2">
           <div>© {year} Glimmora Jewels. All rights reserved.</div>
-          <div className="flex items-center gap-4 text-ivory/50">
+          <div className="flex items-center gap-4 text-pearl/50">
             <Link to="/privacy-policy" className="hover:text-gold transition-colors">Privacy</Link>
             <span>•</span>
             <Link to="/terms-conditions" className="hover:text-gold transition-colors">Terms</Link>

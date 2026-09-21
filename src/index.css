@@ -14,7 +14,13 @@
   --animate-swing-3d: swing-3d 4s ease-in-out infinite;
   --animate-marquee: marquee 30s linear infinite;
   --animate-marquee-reverse: marquee-reverse 30s linear infinite;
-  
+  --animate-scroll-cue: scroll-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+
+  @keyframes scroll-cue {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(200%); }
+  }
+
   @keyframes swing-3d {
     0% { transform: perspective(1000px) rotateX(8deg) rotateY(15deg) rotateZ(6deg); }
     50% { transform: perspective(1000px) rotateX(2deg) rotateY(-15deg) rotateZ(-6deg); }
@@ -33,7 +39,9 @@
 @layer base {
   html,
   body {
-    @apply bg-cream text-charcoal font-sans m-0 p-0 overflow-x-hidden;
+    /* clip, not hidden: hidden on both html and body turns body into a scroll
+       container, which silently breaks the sticky navbar. */
+    @apply bg-cream text-charcoal font-sans m-0 p-0 overflow-x-clip;
     max-width: 100vw;
   }
 

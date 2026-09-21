@@ -1,12 +1,15 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AtSign, Play } from 'lucide-react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { supabase } from '../lib/supabaseClient'
 import { fetchProductCards } from '../lib/products'
 import { type ProductCardData } from '../components/ProductCard'
 import { CoverflowCarousel } from '../components/ui/coverflow-carousel'
+import ScrollStory from '../components/ScrollStory'
+import Reveal from '../components/Reveal'
+import CategoryTile, { type CategoryTileData } from '../components/CategoryTile'
 import { formatInr, discountedPrice } from '../lib/pricing'
-import logo from '../assets/logo.png.png'
 
 function getInstagramDetails(url?: string | null) {
   if (!url) return { isInsta: false, code: null, thumbUrl: null, type: 'other' }
@@ -58,6 +61,7 @@ export default function Home() {
   const [content, setContent] = useState<Record<string, HomeContent>>({})
   const [featured, setFeatured] = useState<ProductCardData[]>([])
   const [glowImages, setGlowImages] = useState<GlowImage[]>([])
+  const [categories, setCategories] = useState<CategoryTileData[]>([])
 
   const carouselCards = useMemo(() => {
     return featured.map((product) => ({
@@ -95,7 +99,31 @@ export default function Home() {
     fetchProductCards({ featuredOnly: true, limit: 8 })
       .then(setFeatured)
       .catch((err) => console.error('Failed to load featured products:', err))
+
+    // Category tiles: each shows its newest product's photo and how many pieces it holds.
+    Promise.all([
+      supabase.from('categories').select('id, name, slug').order('sort_order'),
+      fetchProductCards({}),
+    ])
+      .then(([{ data: cats }, products]) => {
+        setCategories(
+          (cats ?? [])
+            .map((c) => {
+              const inCategory = products.filter((p) => p.category_id === c.id)
+              return { ...c, count: inCategory.length, image: inCategory.find((p) => p.image_url)?.image_url }
+            })
+            .filter((c) => c.count > 0),
+        )
+      })
+      .catch((err) => console.error('Failed to load categories:', err))
   }, [])
+
+  // Sections below the pinned story change height as their data arrives, which
+  // moves every scroll trigger after them; re-measure once they have.
+  useEffect(() => {
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh())
+    return () => cancelAnimationFrame(id)
+  }, [featured.length, categories.length, glowImages.length])
 
   const offerStrip = content['offer_strip']
   const followTheGlow = content['follow_the_glow']
@@ -117,83 +145,81 @@ export default function Home() {
         </section>
       )}
 
-      {/* Hero */}
-      <section className="max-w-6xl mx-auto px-6 py-10 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
-        <div>
-          <p className="eyebrow mb-4 uppercase tracking-[0.25em] text-gold-dark font-medium">The Aura of Elegance</p>
-          <h1 className="font-logo text-4xl md:text-5xl leading-[1.15] mb-5 relative z-10">
-            Jewellery that <span className="italic text-gold-dark">tells your story.</span>
-          </h1>
-          <p className="text-charcoal/70 mb-8 max-w-md relative z-10">
-            Fine craftsmanship, ethically sourced materials, and timeless design for every moment —
-            welcome to Glimmora.
-          </p>
-          <div className="flex items-center gap-6 relative z-10">
-            <Link
-              to="/collections"
-              className="bg-gold-dark text-ivory rounded-lg px-6 py-3 text-sm tracking-wide shadow-sm hover:shadow-md transition-shadow"
-            >
-              Explore Collections
-            </Link>
-            <Link
-              to="/best-sellers"
-              className="text-sm tracking-wide text-charcoal border-b border-charcoal/30 hover:border-gold-dark hover:text-gold-dark pb-0.5 transition-colors"
-            >
-              Best Sellers
-            </Link>
-          </div>
-        </div>
+      {/* Pinned, scroll-driven hero: the life of a piece, ending on the shop CTAs */}
+      <ScrollStory />
 
-        <div className="aspect-[4/5] md:aspect-square flex items-start justify-center relative overflow-visible -mt-4 md:-mt-12">
-          <div className="flex flex-col items-center origin-top animate-swing-3d">
-            <div className="w-0.5 h-16 md:h-24 bg-gradient-to-b from-transparent via-gold-dark/40 to-gold-dark/80"></div>
-            <img
-              src={logo}
-              alt="Glimmora Logo"
-              className="w-full max-w-[450px] object-contain drop-shadow-2xl -mt-4"
-            />
-          </div>
-        </div>
-      </section>
+      {/* Soft hand-off from the dark story into the light page */}
+      <div aria-hidden className="h-24 bg-gradient-to-b from-[#0b0908] to-cream md:h-32" />
 
       {/* Brand Tagline Banner */}
-      <section className="my-10 py-12 bg-ivory/80 border-y border-gold/15 text-center relative overflow-hidden">
-        <div className="max-w-4xl mx-auto px-6 relative z-10">
+      <section className="mb-10 py-12 bg-ivory/80 border-y border-gold/15 text-center relative overflow-hidden">
+        <Reveal className="max-w-4xl mx-auto px-6 relative z-10">
           <p className="text-[11px] uppercase tracking-[0.35em] text-gold-dark mb-2 font-medium">Glimmora Signature</p>
           <h2 className="font-logo text-3xl md:text-4xl text-charcoal italic tracking-wide">
             "The Aura of Elegance"
           </h2>
           <div className="w-16 h-[1px] bg-gold-dark/40 mx-auto mt-4" />
-        </div>
+        </Reveal>
       </section>
 
       {/* Featured products */}
       <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-        <div className="text-center mb-10">
+        <Reveal className="text-center mb-10">
           <p className="eyebrow mb-3">Curated Collection</p>
-          <h2 className="font-logo text-3xl">Designed to be cherished</h2>
-        </div>
-        {featured.length === 0 ? (
-          <p className="text-center text-charcoal/60">Nothing featured yet.</p>
-        ) : (
-          <CoverflowCarousel
-            slides={carouselCards}
-            showCaption
-            showNavigation
-            onSlideClick={(_, index) => {
-              const product = featured[index]
-              if (product) navigate(`/product/${product.slug}`)
-            }}
-          />
-        )}
+          <h2 className="font-logo text-3xl md:text-5xl">
+            Designed to be <span className="italic text-gold-dark">cherished.</span>
+          </h2>
+        </Reveal>
+        <Reveal watch={featured.length}>
+          {featured.length === 0 ? (
+            <p className="text-center text-charcoal/60">Nothing featured yet.</p>
+          ) : (
+            <CoverflowCarousel
+              slides={carouselCards}
+              showCaption
+              showNavigation
+              onSlideClick={(_, index) => {
+                const product = featured[index]
+                if (product) navigate(`/product/${product.slug}`)
+              }}
+            />
+          )}
+        </Reveal>
       </section>
+
+      {/* Shop by category */}
+      {categories.length > 0 && (
+        <section className="max-w-6xl mx-auto px-6 pb-16 md:pb-24">
+          <Reveal className="mb-10 flex flex-col items-center justify-between gap-4 text-center md:flex-row md:items-end md:text-left">
+            <div>
+              <p className="eyebrow mb-3">Explore</p>
+              <h2 className="font-logo text-3xl md:text-5xl">
+                Shop by <span className="italic text-gold-dark">category.</span>
+              </h2>
+            </div>
+            <Link
+              to="/collections"
+              className="text-sm tracking-wide text-charcoal border-b border-charcoal/30 hover:border-gold-dark hover:text-gold-dark pb-0.5 transition-colors"
+            >
+              View all collections
+            </Link>
+          </Reveal>
+          <Reveal stagger watch={categories.length} className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-5 lg:grid-cols-5">
+            {categories.map((c) => (
+              <div key={c.id} data-reveal-item>
+                <CategoryTile category={c} />
+              </div>
+            ))}
+          </Reveal>
+        </section>
+      )}
 
 
 
       {/* Follow the Glow */}
       <section className="py-16 md:py-24 bg-ivory/60 border-t border-gold/15">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
+          <Reveal className="text-center mb-12">
             <p className="eyebrow text-gold-dark mb-3 uppercase tracking-[0.25em] font-medium">Join the Community</p>
             <h2 className="font-logo text-3xl md:text-5xl mb-4">
               Follow the <span className="italic text-gold-dark">Glow</span>
@@ -201,9 +227,9 @@ export default function Home() {
             <p className="text-sm text-charcoal/70 max-w-md mx-auto">
               Real moments in Glimmora, styled by you — tag us <span className="text-gold-dark font-medium">@glimmora.in</span> to be featured.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
+          <Reveal stagger watch={glowImages.length} className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
             {(glowImages.length > 0
               ? glowImages
               : [
@@ -234,6 +260,7 @@ export default function Home() {
               return (
                 <a
                   key={item.id || i}
+                  data-reveal-item
                   href={redirectUrl}
                   target="_blank"
                   rel="noreferrer"
@@ -280,7 +307,7 @@ export default function Home() {
                 </a>
               )
             })}
-          </div>
+          </Reveal>
 
           <div className="text-center">
             <a

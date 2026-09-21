@@ -23,3 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local design references (third-party content, not for the public repo)
+website example/

@@ -16,7 +16,11 @@ write access to the live store. The dashboard screenshot below shows what it doe
 
 ### Storefront
 
-![Glimmora homepage](docs/screenshot-home.png)
+The homepage opens on a pinned, scroll-driven story: five chapters in the life of a piece
+(metal, craft, stone, finish, moment), each image pushing in and crossfading as you scroll
+while its headline dissolves in over drifting gold dust, ending on the shop CTAs.
+
+![Glimmora homepage scroll story](docs/screenshot-home.png)
 
 ### Product detail
 
@@ -47,6 +51,8 @@ The product code (`GPD005`) is assigned by a database trigger, not entered by ha
 ## What it does
 
 **Storefront**
+- Scroll-scrubbed cinematic hero (GSAP ScrollTrigger) with a still fallback for reduced-motion users
+- Sections that tilt in with 3D perspective, and category cards that tilt toward the cursor
 - Browse by category (`/collections/:slug`) and by occasion, plus a Casual/Ethnic section split
 - Full-text product search across names and descriptions
 - Cart and wishlist that survive a refresh, with wishlist synced to the signed-in account
